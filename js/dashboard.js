@@ -6,6 +6,14 @@ const welcomeOwner=document.getElementById('welcomeOwner')
 const balance=document.getElementById('balance')
 const logoutBtn=document.getElementById('logoutBtn')
 const ownerName=document.getElementById('ownerName')
+const depositBtn=document.getElementById('depositBtn')
+const withdrawBtn=document.getElementById('withdrawBtn')
+const amountInput=document.getElementById('amountInput')
+
+
+
+
+
 const accAmount=account?.amount
 let format=new Intl.NumberFormat('en-US',{
     style:'currency',
@@ -16,6 +24,8 @@ account?.userImage ?profileImage.src=account.userImage:profileImage.src='../asse
 welcomeOwner.textContent=account?.adminname
 balance.textContent=format
 ownerName.textContent=account?.adminname
+
+
 
 logoutBtn.addEventListener('click',()=>{
     Toastify({
@@ -33,3 +43,13 @@ logoutBtn.addEventListener('click',()=>{
     }, 2000);
 })
 })
+
+class Account {
+    constructor(owner,currency,pin,blance){
+        this.owner=owner
+        this.currency=currency
+        this.pin=pin
+        this.blance=blance
+        this.movements=[]
+    }
+}
