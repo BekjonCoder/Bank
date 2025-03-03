@@ -47,6 +47,13 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
+    
+    const profileImage = document.getElementById('profileImage');
+    const welcomeOwner = document.getElementById('welcomeOwner');
+    const balance = document.getElementById('balance');
+    const depositBtn = document.getElementById('depositBtn');
+    const withdrawBtn = document.getElementById('withdrawBtn');
+    const amountInput = document.getElementById('amountInput');
     class Account {
         constructor(adminname, amount, userImage, username, transaction) {
             this.adminname = adminname;
@@ -63,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.saveToLocalStorage();
                 this.updateUI();
                 this.showTransactions();
-                this.showToast(`Hisobingizga $${amount} qo'shildi`, "green");
+                this.showToast(`Hisobingizga ${amount}$ qo'shildi`, "green");
             } else {
                 this.showToast("Noto'g'ri miqdor kiritildi", "red");
             }
@@ -88,21 +95,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const updatedAccounts = accounts.map(acc => acc.username === this.username ? this : acc);
             localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
         }
-
         updateUI() {
-            balance.textContent = this.formatAmount();
+            const storedAccount = JSON.parse(localStorage.getItem('account'));
+            if (storedAccount) {
+                this.amount = storedAccount.amount;
+                balance.textContent = this.formatAmount();
+            }
         }
+        
 
         showTransactions() {
             const transactionList = document.getElementById('transactionList');
             transactionList.innerHTML = "";
-            this.transaction.forEach(trans => {
+            this.transaction.forEach(b => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${trans.type}</td>
-                    <td>$${trans.amount}</td>
-                    <td>${trans.date}</td>
-                    <td>${trans.type === "deposit" ? "✅" : "❌"}</td>
+                    <td>${b.type}</td>
+                    <td>$${b.amount}</td>
+                    <td>${b.date}</td>
+                    <td>${b.type === "deposit" ? "✅" : "❌"}</td>
                 `;
                 transactionList.appendChild(row);
             });
@@ -136,12 +147,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const account = new Account(storedAccount.adminname, storedAccount.amount, storedAccount.userImage, storedAccount.username, storedAccount.transaction);
     
-    const profileImage = document.getElementById('profileImage');
-    const welcomeOwner = document.getElementById('welcomeOwner');
-    const balance = document.getElementById('balance');
-    const depositBtn = document.getElementById('depositBtn');
-    const withdrawBtn = document.getElementById('withdrawBtn');
-    const amountInput = document.getElementById('amountInput');
 
     profileImage.src = account.userImage;
     welcomeOwner.textContent = account.adminname;
